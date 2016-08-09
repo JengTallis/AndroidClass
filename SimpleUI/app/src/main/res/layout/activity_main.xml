@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="What  to drink?"
+        android:text="Name:"
         android:id="@+id/textView"
         android:textColor="#11ed27"
         android:textSize="24dp" />
@@ -20,13 +20,14 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="click"
+        android:text="submit"
         android:id="@+id/btn1"
         android:layout_below="@+id/radioGroup"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="click"
-        android:clickable="false" />
+        android:clickable="false"
+        android:background="@drawable/red" />
 
     <EditText
         android:layout_width="match_parent"
@@ -59,4 +60,5 @@
             android:id="@+id/greenTeaRadioBtn"
             android:checked="false" />
     </RadioGroup>
+
 </RelativeLayout>
