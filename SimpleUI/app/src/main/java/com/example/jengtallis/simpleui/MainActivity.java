@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = (TextView)findViewById(R.id.textView);
-        textView.setText("Hello textView!");
 
         editText = (EditText) findViewById(R.id.editText);
 
@@ -35,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.blackTeaRadioBtn){
-                    drink = blackTeaRadioBtn.getText().toString();
+                    drink = "Black Tea";
                 }else if(checkedId == R.id.greenTeaRadioBtn){
-                    drink = greenTeaRadioBtn.getText().toString();
+                    drink = "Green Tea";
                 }
             }
         });
