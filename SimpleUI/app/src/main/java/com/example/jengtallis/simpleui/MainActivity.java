@@ -66,23 +66,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupListView(){
 //        String[] data = new String[]{"0","1","2","3","4","5","6","7","8","9"};
-        List<Map<String, String>>mapList = new ArrayList<>();
-        for(Order order: data){
-            Map<String, String> item = new HashMap<>();
+//        List<Map<String, String>>mapList = new ArrayList<>();
+//        for(Order order: data){
+//            Map<String, String> item = new HashMap<>();
+//
+//            item.put("note", order.note);
+//            item.put("storeInfo", order.storeInfo);
+//            item.put("drink", order.drink);
+//
+//            mapList.add(item);
+//        }
+//
+//        String[] from = {"note", "storeInfo", "drink"};
+//        int[] to = {R.id.noteTextView, R.id.storeInfoTextView, R.id.drinkTextView};
+//
+//        SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.listview_order_item, from, to);
 
-            item.put("note", order.note);
-            item.put("storeInfo", order.storeInfo);
-            item.put("drink", order.drink);
+          OrderAdapter adapter = new OrderAdapter(this, data);
 
-            mapList.add(item);
-        }
-
-        String[] from = {"note", "storeInfo", "drink"};
-        int[] to = {R.id.noteTextView, R.id.storeInfoTextView, R.id.drinkTextView};
-
-        SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.listview_order_item, from, to);
-
-        listView.setAdapter(adapter);
+          listView.setAdapter(adapter);
     }
 
     private void setupSpinner(){
@@ -106,5 +108,5 @@ public class MainActivity extends AppCompatActivity {
         data.add(order);
         setupListView();
     }
-    
+
 }
