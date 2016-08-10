@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storeInfo">
+        <item>NTU</item>
+        <item>GongGuan</item>
+        <item>XiMen</item>
+        <item>FuXing</item>
+        <item>FuDa</item>
+        <item>ZhiShan</item>
+    </string-array>
+</resources>

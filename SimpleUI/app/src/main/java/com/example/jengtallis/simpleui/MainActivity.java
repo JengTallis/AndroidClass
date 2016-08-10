@@ -9,7 +9,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +23,11 @@ public class MainActivity extends AppCompatActivity {
     RadioButton greenTeaRadioBtn;
     RadioGroup radioGroup;
     ListView listView;
+    Spinner spinner;
 
     String drink = "Black Tea";
+
+    List<String> data = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         greenTeaRadioBtn = (RadioButton) findViewById(R.id.greenTeaRadioBtn);
 
         listView = (ListView) findViewById(R.id.listView);
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -49,17 +57,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setupListView();
+        setupSpinner();
+
     }
 
     private void setupListView(){
-        String[] data = new String[]{"0","1","2","3","4","5","6","7","8","9"};
+//        String[] data = new String[]{"0","1","2","3","4","5","6","7","8","9"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
         listView.setAdapter(adapter);
     }
 
+    private void setupSpinner(){
+        String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
+        spinner.setAdapter(adapter);
+    }
+
     public void click(View view){
         String name = editText.getText().toString();
-        textView.setText(name + "'s order: " + drink);
+        String str = name + "'s order: " + drink;
+        textView.setText(str);
         editText.setText("");
+
+        data.add(str);
+        setupListView();
     }
 }
