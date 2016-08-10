@@ -75,5 +75,4 @@ public class OrderAdapter extends BaseAdapter {
         TextView drinkTextView;
     }
 
-
 }
