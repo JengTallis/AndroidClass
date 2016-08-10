@@ -106,13 +106,5 @@ public class MainActivity extends AppCompatActivity {
         data.add(order);
         setupListView();
     }
-
-    /**
-     * Created by alog1024 on 8/10/16.
-     */
-    public static class Order {
-        String note;
-        String storeInfo;
-        String drink;
-    }
+    
 }
