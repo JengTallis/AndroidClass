@@ -1,5 +1,6 @@
 package com.example.jengtallis.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,6 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
         data.add(order);
         setupListView();
+    }
+
+    public void goToMenu(View view){
+        Intent intent = new Intent();
+        intent.setClass(this, DrinkMenuActivity.class);
+        startActivity(intent);
     }
 
     @Override
