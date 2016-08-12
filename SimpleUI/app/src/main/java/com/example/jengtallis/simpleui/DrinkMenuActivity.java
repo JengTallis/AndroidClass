@@ -89,7 +89,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         FragmentTransaction ft = fragmentManager.beginTransaction();
 //      FragmentTransaction : include two unlikely to have problems in process, main thread decides time to do job, reversible: get back previous fragment
 //      FragmentTransaction: to start a fragment: from activity to fragment or from fragment to fragment
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
 
 //        ft.replace(R.id.root, dialog);
 //
