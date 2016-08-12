@@ -1,5 +1,8 @@
 package com.example.jengtallis.simpleui;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrinkMenuActivity extends AppCompatActivity {
+public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDialog.OnFragmentInteractionListener {
 
     ListView drinkMenuListView;
     TextView totalTextView;
@@ -50,8 +53,9 @@ public class DrinkMenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Drink drink = (Drink)parent.getAdapter().getItem(position);
-                total += drink.mPrice;
-                totalTextView.setText(String.valueOf(total));
+//                total += drink.mPrice;
+//                totalTextView.setText(String.valueOf(total));
+                showDrinkOrderDialog(drink);
             }
         });
 
@@ -77,6 +81,19 @@ public class DrinkMenuActivity extends AppCompatActivity {
     private void setupDrinkMenu() {
         DrinkAdapter adapter = new DrinkAdapter(this, drinkList);
         drinkMenuListView.setAdapter(adapter);
+    }
+
+    private void showDrinkOrderDialog(Drink drink){
+        FragmentManager fragmentManager = getFragmentManager();
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+//      FragmentTransaction : include two unlikely to have problems in process, main thread decides time to do job, reversible: get back previous fragment
+
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
+
+        ft.replace(R.id.root, dialog);
+
+        ft.commit();
     }
 
     public void done(View view){
@@ -161,5 +178,10 @@ public class DrinkMenuActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d("DEBUG", "DrinkMenuActivity OnDestroy");
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
