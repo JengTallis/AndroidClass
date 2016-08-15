@@ -31,7 +31,8 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     int[] mPrices = {25, 35, 45, 35};
     int[] imageIds = {R.drawable.drink1, R.drawable.drink2, R.drawable.drink3, R.drawable.drink4};
     int total = 0;
-    List<Drink> drinkList = new ArrayList<Drink>();
+    List<Drink> drinkList = new ArrayList<>();
+    List<DrinkOrder> drinkOrderList = new ArrayList<>();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -183,7 +184,16 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onDrinkOrderResult(DrinkOrder drinkOrder) {
+        drinkOrderList.add(drinkOrder);
+        updateTotalTextView();
+    }
 
+    private void updateTotalTextView(){
+        int total = 0;
+        for(DrinkOrder drinkOrder: drinkOrderList){
+            total += drinkOrder.mNumber * drinkOrder.drink.mPrice + drinkOrder.lNumber * drinkOrder.drink.lPrice;
+        }
+        totalTextView.setText(String.valueOf(total));
     }
 }
