@@ -20,7 +20,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="submit"
+        android:text=""
         android:id="@+id/btn1"
         android:layout_below="@+id/spinner"
         android:layout_alignParentLeft="true"
@@ -35,7 +35,8 @@
         android:id="@+id/editText"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:hint="Name" />
 
     <RadioGroup
         android:layout_width="match_parent"
@@ -91,7 +92,11 @@
         android:layout_alignTop="@+id/btn1"
         android:layout_toRightOf="@+id/btn1"
         android:layout_toEndOf="@+id/btn1"
-        android:textSize="24dp"
-        android:onClick="goToMenu" />
+        android:textSize="32dp"
+        android:onClick="goToMenu"
+        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTintMode="multiply"
+        android:textColor="#ffffff"
+        android:padding="14dp" />
 
 </RelativeLayout>
