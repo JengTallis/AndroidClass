@@ -1,8 +1,11 @@
 package com.example.jengtallis.simpleui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     String drink = "Black Tea";
 
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
     List<Order> data = new ArrayList<Order>();
+
+    SharedPreferences sharedPreferences;
+//    in xml file, not suitable for large data as it includes many tags
+//    user info, app setting, ui status
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,30 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
         spinner = (Spinner) findViewById(R.id.spinner);
+
+        sharedPreferences = getSharedPreferences("UIState", MODE_PRIVATE);
+//        create a xml file called UIState
+        editor = sharedPreferences.edit();
+//        grant editor the right to edit
+
+        editText.setText(sharedPreferences.getString("editText", ""));
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editor.putString("editText", editText.getText().toString());
+                editor.apply();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -118,15 +151,18 @@ public class MainActivity extends AppCompatActivity {
         Order order = new Order();
 
         order.note = name;
-        order.drink = drink;
+        order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         data.add(order);
+
+        drinkOrderList = new ArrayList<>();
         setupListView();
     }
 
     public void goToMenu(View view){
         Intent intent = new Intent();
+        intent.putExtra("result", drinkOrderList);
         intent.setClass(this, DrinkMenuActivity.class);
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
     }
@@ -136,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY){
             if(resultCode == RESULT_OK){
-                String result = data.getStringExtra("result");
-                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                drinkOrderList = data.getParcelableArrayListExtra("result");
+//                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }else if(resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "Order canceled", Toast.LENGTH_LONG).show();
             }

@@ -32,7 +32,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     int[] imageIds = {R.drawable.drink1, R.drawable.drink2, R.drawable.drink3, R.drawable.drink4};
     int total = 0;
     List<Drink> drinkList = new ArrayList<>();
-    List<DrinkOrder> drinkOrderList = new ArrayList<>();
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -47,8 +47,12 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         setData();
 
+        Intent intent = getIntent();
+        drinkOrderList = intent.getParcelableArrayListExtra("result");
+
         drinkMenuListView = (ListView) findViewById(R.id.drinkMenuListView);
         totalTextView = (TextView) findViewById(R.id.totalTextView);
+        updateTotalTextView();
 
         drinkMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,12 +89,24 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     }
 
     private void showDrinkOrderDialog(Drink drink){
+        DrinkOrder order = null;
+        for(DrinkOrder drinkOrder: drinkOrderList){
+            if(drinkOrder.drink.name.equals(drink.name)){
+                order = drinkOrder;
+                break;
+            }
+        }
+        if(order == null){
+            order = new DrinkOrder(drink);
+        }
+
+
         FragmentManager fragmentManager = getFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
 //      FragmentTransaction : include two unlikely to have problems in process, main thread decides time to do job, reversible: get back previous fragment
 //      FragmentTransaction: to start a fragment: from activity to fragment or from fragment to fragment
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(order);
 
 //        ft.replace(R.id.root, dialog);
 //
@@ -101,7 +117,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     public void done(View view){
         Intent intent = new Intent();
-        intent.putExtra("result", String.valueOf(total));
+        intent.putExtra("result", drinkOrderList);
 
         setResult(RESULT_OK, intent);
         finish();
@@ -185,7 +201,19 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     @Override
     public void onDrinkOrderResult(DrinkOrder drinkOrder) {
-        drinkOrderList.add(drinkOrder);
+        boolean flag = false;
+        for(int i = 0; i < drinkOrderList.size(); i++){
+            if(drinkOrderList.get(i).drink.name.equals(drinkOrder.drink.name)){
+                drinkOrderList.set(i, drinkOrder);
+                flag = true;
+                break;
+            }
+        }
+
+        if(!flag){
+            drinkOrderList.add(drinkOrder);
+        }
+
         updateTotalTextView();
     }
 
