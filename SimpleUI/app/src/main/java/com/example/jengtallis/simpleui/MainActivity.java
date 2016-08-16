@@ -20,7 +20,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +120,24 @@ public class MainActivity extends AppCompatActivity {
 
         ParseObject testObject = new ParseObject("TestObject");
         testObject.put("foo", "bar");
-        testObject.saveInBackground();
+        testObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(MainActivity.this, "Successfully uploaded to server", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null){
+                    Toast.makeText(MainActivity.this, objects.get(0).getString("foo"),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
