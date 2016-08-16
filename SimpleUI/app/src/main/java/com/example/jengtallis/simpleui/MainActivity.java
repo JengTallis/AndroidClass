@@ -116,28 +116,32 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
         setupSpinner();
 
+
+
         Log.d("DEBUG", "MainActivity OnCreate");
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(MainActivity.this, "Successfully uploaded to server", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e == null){
-                    Toast.makeText(MainActivity.this, objects.get(0).getString("foo"),Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
+//        ParseObject testObject = new ParseObject("TestObject");
+//        testObject.put("foo", "bar");
+//        testObject.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if (e == null) {
+//                    Toast.makeText(MainActivity.this, "Successfully uploaded to server", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if(e == null){
+//                    Toast.makeText(MainActivity.this, objects.get(0).getString("foo"),Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
     }
 
