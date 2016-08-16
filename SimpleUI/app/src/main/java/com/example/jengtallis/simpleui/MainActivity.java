@@ -14,15 +14,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
     String drink = "Black Tea";
 
     ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
-    List<Order> data = new ArrayList<Order>();
+    List<Order> orderList = new ArrayList<Order>();
 
     SharedPreferences sharedPreferences;
-//    in xml file, not suitable for large data as it includes many tags
+//    in xml file, not suitable for large orderList as it includes many tags
 //    user info, app setting, ui status
     SharedPreferences.Editor editor;
 
@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setupOrderHistory();
+
         setupListView();
         setupSpinner();
 
@@ -113,10 +115,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setupOrderHistory() {
+        String orderDatas = Utils.readFile(this, "history");
+        String[] orderDataArray = orderDatas.split("\n");
+        Gson gson = new Gson();
+        for(String orderData: orderDataArray){
+            try{
+                Order order = gson.fromJson(orderData, Order.class);
+                if(order != null){
+                    orderList.add(order);
+                }
+            }
+            catch (JsonSyntaxException e){
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     private void setupListView(){
-//        String[] data = new String[]{"0","1","2","3","4","5","6","7","8","9"};
+//        String[] orderList = new String[]{"0","1","2","3","4","5","6","7","8","9"};
 //        List<Map<String, String>>mapList = new ArrayList<>();
-//        for(Order order: data){
+//        for(Order order: orderList){
 //            Map<String, String> item = new HashMap<>();
 //
 //            item.put("note", order.note);
@@ -131,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        SimpleAdapter adapter = new SimpleAdapter(this, mapList, R.layout.listview_order_item, from, to);
 
-          OrderAdapter adapter = new OrderAdapter(this, data);
+          OrderAdapter adapter = new OrderAdapter(this, orderList);
 
           listView.setAdapter(adapter);
     }
@@ -159,18 +179,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click(View view){
-        String name = editText.getText().toString();
-        String str = name + "'s order: " + drink;
-        textView.setText(str);
-        editText.setText("");
 
         Order order = new Order();
 
-        order.note = name;
+        order.note = editText.getText().toString();
         order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
-        data.add(order);
+        orderList.add(order);
+
+        Gson gson = new Gson();
+        String orderData = gson.toJson(order);
+        Utils.writeFile(this, "history", orderData + '\n');
+
+        textView.setText("New Order");
+        editText.setText("");
 
         drinkOrderList = new ArrayList<>();
         setupListView();
@@ -189,6 +212,14 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY){
             if(resultCode == RESULT_OK){
                 drinkOrderList = data.getParcelableArrayListExtra("result");
+                String name = editText.getText().toString();
+                int numOfDrinks = 0;
+                int total = 0;
+                for(DrinkOrder drinkOrder: drinkOrderList){
+                    total += drinkOrder.mNumber * drinkOrder.drink.mPrice + drinkOrder.lNumber * drinkOrder.drink.lPrice;
+                    numOfDrinks += drinkOrder.mNumber + drinkOrder.lNumber;
+                }
+                textView.setText(name + "'s order: " + String.valueOf(numOfDrinks) + " drinks, total: $" + String.valueOf(total));
 //                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }else if(resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "Order canceled", Toast.LENGTH_LONG).show();

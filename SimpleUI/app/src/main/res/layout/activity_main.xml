@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name:"
+        android:text="New  Order"
         android:id="@+id/textView"
         android:textColor="#11ed27"
         android:textSize="24dp" />
