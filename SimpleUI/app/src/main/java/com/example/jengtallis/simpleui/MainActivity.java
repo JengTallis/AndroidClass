@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.blackTeaRadioBtn){
+                if (checkedId == R.id.blackTeaRadioBtn) {
                     drink = "Black Tea";
-                }else if(checkedId == R.id.greenTeaRadioBtn){
+                } else if (checkedId == R.id.greenTeaRadioBtn) {
                     drink = "Green Tea";
                 }
             }
@@ -112,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         setupSpinner();
 
         Log.d("DEBUG", "MainActivity OnCreate");
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
 
     }
 
