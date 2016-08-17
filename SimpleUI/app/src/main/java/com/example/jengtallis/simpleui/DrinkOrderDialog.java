@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 
 /**
@@ -150,7 +151,12 @@ public class DrinkOrderDialog extends DialogFragment {
 
     private void setCheckedRadioButtonByText(String checkedText, RadioGroup radioGroup){
         int count = radioGroup.getChildCount();
-        for(int i = 0; i < count; i++){
+
+        if(checkedText == null){
+            checkedText = "REGULAR";
+        }
+
+      for(int i = 0; i < count; i++){
             View view = radioGroup.getChildAt(i);
             if(view instanceof RadioButton){
                 RadioButton radioButton = (RadioButton) view;
@@ -162,6 +168,7 @@ public class DrinkOrderDialog extends DialogFragment {
             }
         }
     }
+
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {

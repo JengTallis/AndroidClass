@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
-                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, order.getNote(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -146,6 +146,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupOrderHistory() {
+
+            Order.getQuery().findInBackground(new FindCallback<Order>() {
+                @Override
+                public void done(List<Order> objects, ParseException e) {
+                    if(e == null){
+                        orderList = objects;
+                        setupListView();
+                    }
+                }
+            });
 //        String orderDatas = Utils.readFile(this, "history");
 //        String[] orderDataArray = orderDatas.split("\n");
 //        Gson gson = new Gson();
@@ -212,15 +222,24 @@ public class MainActivity extends AppCompatActivity {
 
         Order order = new Order();
 
-        order.note = editText.getText().toString();
-        order.drinkOrderList = drinkOrderList;
-        order.storeInfo = (String)spinner.getSelectedItem();
+        order.setNote(editText.getText().toString());
+        order.setDrinkOrderList(drinkOrderList);
+        order.setStoreInfo((String) spinner.getSelectedItem());
 
         orderList.add(order);
 
-        Gson gson = new Gson();
-        String orderData = gson.toJson(order);
-        Utils.writeFile(this, "history", orderData + '\n');
+        order.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null){
+                    Toast.makeText(MainActivity.this, "Order failed", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+//        Gson gson = new Gson();
+//        String orderData = gson.toJson(order);
+//        Utils.writeFile(this, "history", orderData + '\n');
 
         textView.setText("New Order");
         editText.setText("");
