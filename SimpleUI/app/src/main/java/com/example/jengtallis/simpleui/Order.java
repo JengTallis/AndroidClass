@@ -13,7 +13,7 @@ public class Order {
     public int getTotal(){
         int total = 0;
         for(DrinkOrder drinkOrder: drinkOrderList){
-            total += drinkOrder.mNumber * drinkOrder.drink.mPrice + drinkOrder.lNumber * drinkOrder.drink.lPrice;
+            total += drinkOrder.getmNumber() * drinkOrder.getDrink().getmPrice() + drinkOrder.getlNumber() * drinkOrder.getDrink().getlPrice();
         }
         return total;
     }

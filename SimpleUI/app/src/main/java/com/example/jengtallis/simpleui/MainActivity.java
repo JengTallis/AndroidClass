@@ -146,21 +146,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupOrderHistory() {
-        String orderDatas = Utils.readFile(this, "history");
-        String[] orderDataArray = orderDatas.split("\n");
-        Gson gson = new Gson();
-        for(String orderData: orderDataArray){
-            try{
-                Order order = gson.fromJson(orderData, Order.class);
-                if(order != null){
-                    orderList.add(order);
-                }
-            }
-            catch (JsonSyntaxException e){
-                e.printStackTrace();
-            }
-
-        }
+//        String orderDatas = Utils.readFile(this, "history");
+//        String[] orderDataArray = orderDatas.split("\n");
+//        Gson gson = new Gson();
+//        for(String orderData: orderDataArray){
+//            try{
+//                Order order = gson.fromJson(orderData, Order.class);
+//                if(order != null){
+//                    orderList.add(order);
+//                }
+//            }
+//            catch (JsonSyntaxException e){
+//                e.printStackTrace();
+//            }
+//
+//        }
     }
 
     private void setupListView(){
@@ -246,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
                 int numOfDrinks = 0;
                 int total = 0;
                 for(DrinkOrder drinkOrder: drinkOrderList){
-                    total += drinkOrder.mNumber * drinkOrder.drink.mPrice + drinkOrder.lNumber * drinkOrder.drink.lPrice;
-                    numOfDrinks += drinkOrder.mNumber + drinkOrder.lNumber;
+                    total += drinkOrder.getmNumber() * drinkOrder.getDrink().getmPrice() + drinkOrder.getlNumber() * drinkOrder.getDrink().getlPrice();
+                    numOfDrinks += drinkOrder.getmNumber() + drinkOrder.getlNumber();
                 }
                 textView.setText(name + "'s order: " + String.valueOf(numOfDrinks) + " drinks, total: $" + String.valueOf(total));
 //                Toast.makeText(this, result, Toast.LENGTH_LONG).show();

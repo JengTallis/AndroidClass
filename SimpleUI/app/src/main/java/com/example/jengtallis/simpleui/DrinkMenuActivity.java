@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_menu);
 
-        setData();
+//        setData();
 
         Intent intent = getIntent();
         drinkOrderList = intent.getParcelableArrayListExtra("result");
@@ -57,31 +59,44 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         drinkMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Drink drink = (Drink)parent.getAdapter().getItem(position);
+                Drink drink = (Drink) parent.getAdapter().getItem(position);
 //                total += drink.mPrice;
 //                totalTextView.setText(String.valueOf(total));
                 showDrinkOrderDialog(drink);
             }
         });
 
-        setupDrinkMenu();
+//        setupDrinkMenu();
 
         Log.d("DEBUG", "DrinkMenuActivity OnCreate");
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+            @Override
+            public void done(List<Drink> objects, ParseException e) {
+                if(e == null){
+                    drinkList = objects;
+                    setupDrinkMenu();
+                }
+            }
+        });
     }
 
-    private void setData() {
-        for (int i = 0; i < names.length; i++) {
-            Drink drink = new Drink();
-            drink.name = names[i];
-            drink.lPrice = lPrices[i];
-            drink.mPrice = mPrices[i];
-            drink.imageId = imageIds[i];
-            drinkList.add(drink);
-        }
-    }
+//    private void setData() {
+//        for (int i = 0; i < names.length; i++) {
+//            Drink drink = new Drink();
+//            drink.name = names[i];
+//            drink.lPrice = lPrices[i];
+//            drink.mPrice = mPrices[i];
+//            drink.imageId = imageIds[i];
+//            drinkList.add(drink);
+//        }
+//    }
+
+
+
 
     private void setupDrinkMenu() {
         DrinkAdapter adapter = new DrinkAdapter(this, drinkList);
@@ -91,7 +106,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     private void showDrinkOrderDialog(Drink drink){
         DrinkOrder order = null;
         for(DrinkOrder drinkOrder: drinkOrderList){
-            if(drinkOrder.drink.name.equals(drink.name)){
+            if(drinkOrder.getDrink().getName().equals(drink.getName())){
                 order = drinkOrder;
                 break;
             }
@@ -203,7 +218,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public void onDrinkOrderResult(DrinkOrder drinkOrder) {
         boolean flag = false;
         for(int i = 0; i < drinkOrderList.size(); i++){
-            if(drinkOrderList.get(i).drink.name.equals(drinkOrder.drink.name)){
+            if(drinkOrderList.get(i).getDrink().getObjectId().equals(drinkOrder.getDrink().getObjectId())){
                 drinkOrderList.set(i, drinkOrder);
                 flag = true;
                 break;
@@ -220,7 +235,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     private void updateTotalTextView(){
         int total = 0;
         for(DrinkOrder drinkOrder: drinkOrderList){
-            total += drinkOrder.mNumber * drinkOrder.drink.mPrice + drinkOrder.lNumber * drinkOrder.drink.lPrice;
+            total += drinkOrder.getmNumber() * drinkOrder.getDrink().getmPrice() + drinkOrder.getlNumber() * drinkOrder.getDrink().getlPrice();
         }
         totalTextView.setText(String.valueOf(total));
     }
