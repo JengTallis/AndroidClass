@@ -34,28 +34,31 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
         drinkOrderResultsTextView.setText(resultText);
 
+        (new GeoCodingTask()).execute("");
 
-        final Handler handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                latLngTextView.setText("123,456");
-                return false;
-            }
-        });
+        // Thread may lead to memory leak
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    handler.sendMessage(new Message());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        final Handler handler = new Handler(new Handler.Callback() {
+//            @Override
+//            public boolean handleMessage(Message msg) {
+////                latLngTextView.setText("123,456");
+//                return false;
+//            }
+//        });
+//
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Thread.sleep(1000);
+//                    handler.sendMessage(new Message());
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        thread.start();
 
-        thread.start();
     }
-
 }
