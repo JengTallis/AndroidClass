@@ -25,7 +25,7 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class  MainActivity extends AppCompatActivity {
 
     static final int REQUEST_CODE_DRINK_MENU_ACTIVITY = 0;
 
@@ -200,23 +200,62 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupSpinner(){
 
-        String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
-        spinner.setAdapter(adapter);
+//        String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
 
-        spinner.setSelection(sharedPreferences.getInt("spinner", 0));
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        StoreInfo.getQuery().findInBackground(new FindCallback<StoreInfo>() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                editor.putInt("spinner", spinner.getSelectedItemPosition());
-                editor.apply();
-            }
+            public void done(List<StoreInfo> list, ParseException e) {
+                if(e == null){
+                    List<String> storeInfo = new ArrayList<String>();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    for(StoreInfo info : list){
+                        String nameWithAddress = info.getName() + " " + info.getAddress();
+                        storeInfo.add(nameWithAddress);
+                    }
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
+                    spinner.setAdapter(adapter);
+                }else{
+                    String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
+                    e.printStackTrace();
+                    spinner.setAdapter(adapter);
+                }
 
+
+                spinner.setSelection(sharedPreferences.getInt("spinner", 0));
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        editor.putInt("spinner", spinner.getSelectedItemPosition());
+                        editor.apply();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
             }
         });
+
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
+
+//        spinner.setAdapter(adapter);
+//
+//        spinner.setSelection(sharedPreferences.getInt("spinner", 0));
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                editor.putInt("spinner", spinner.getSelectedItemPosition());
+//                editor.apply();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
     }
 

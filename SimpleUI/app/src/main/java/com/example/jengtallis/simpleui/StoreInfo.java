@@ -65,24 +65,6 @@ public class StoreInfo extends ParseObject implements Parcelable {
         }
     };
 
-    public static void getStoreInfoFromLocalThenRemote(final FindCallback<StoreInfo> callback) {
-        getQuery().fromLocalDatastore().findInBackground(callback);
-        getQuery().findInBackground(new FindCallback<StoreInfo>() {
-            @Override
-            public void done(final List<StoreInfo> list, ParseException e) {
-                if (e == null) {
-                    unpinAllInBackground("StoreInfo", new DeleteCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            pinAllInBackground("StoreInfo", list);
-                        }
-                    });
-                }
-                callback.done(list, e);
-            }
-        });
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -98,16 +80,6 @@ public class StoreInfo extends ParseObject implements Parcelable {
             dest.writeInt(1);
             dest.writeString(getObjectId());
         }
-    }
-
-    public static StoreInfo getStoreInfoFromCache(String objectId){
-        try {
-            StoreInfo storeInfo = getQuery().fromLocalDatastore().get(objectId);
-            return storeInfo;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return StoreInfo.createWithoutData(StoreInfo.class, objectId);
     }
 
 }
