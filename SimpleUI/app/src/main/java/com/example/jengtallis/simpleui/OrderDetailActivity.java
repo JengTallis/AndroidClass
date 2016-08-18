@@ -30,7 +30,7 @@ public class OrderDetailActivity extends AppCompatActivity {
             String lNumber = String.valueOf(drinkOrder.getlNumber());
             String mNumber = String.valueOf(drinkOrder.getmNumber());
             String drinkName = drinkOrder.getDrink().getName();
-            resultText += drinkName + "M: " + mNumber + "L: " + "\n";
+            resultText += drinkName + " M: " + mNumber + "  L: " + lNumber + "\n";
         }
         drinkOrderResultsTextView.setText(resultText);
 
