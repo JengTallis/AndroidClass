@@ -73,7 +73,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+        Drink.getDrinksFromLocalThenRemote(new FindCallback<Drink>() {
             @Override
             public void done(List<Drink> objects, ParseException e) {
                 if(e == null){
@@ -82,7 +82,10 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
                 }
             }
         });
+
     }
+
+
 
 //    private void setData() {
 //        for (int i = 0; i < names.length; i++) {

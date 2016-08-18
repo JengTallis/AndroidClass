@@ -1,6 +1,9 @@
 package com.example.jengtallis.simpleui;
 
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -59,6 +62,19 @@ public class Order extends ParseObject{
         return ParseQuery.getQuery(Order.class)
                 .include(DRINKORDERLIST_COL)
                 .include(DRINKORDERLIST_COL + '.' + DrinkOrder.DRINK_COL);
+    }
+
+    public static void getOrderFromLocalThenRemote(final FindCallback<Order> callback){
+        getQuery().fromLocalDatastore().findInBackground(callback);
+        getQuery().findInBackground(new FindCallback<Order>() {
+            @Override
+            public void done(final List<Order> list, ParseException e) {
+                if (e == null) {
+                    pinAllInBackground("Order", list);
+                }
+                callback.done(list, e);
+            }
+        });
     }
 
 }
