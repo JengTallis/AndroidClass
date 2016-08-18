@@ -18,12 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -57,7 +53,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = (TextView)findViewById(R.id.textView);
+//        Order.getQuery().findInBackground(new FindCallback<Order>() {
+//            @Override
+//            public void done(List<Order> objects, ParseException e) {
+//                Order.deleteAllInBackground(objects);
+//            }
+//        });
+
+        textView = (TextView)findViewById(R.id.drinkOrderResultsTextView);
 
         editText = (EditText) findViewById(R.id.editText);
 
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
+                goToDetail(order);
 //                Toast.makeText(MainActivity.this, order.getNote(), Toast.LENGTH_LONG).show();
             }
         });
@@ -116,11 +120,7 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
         setupSpinner();
 
-
-
         Log.d("DEBUG", "MainActivity OnCreate");
-
-
 
 //        ParseObject testObject = new ParseObject("TestObject");
 //        testObject.put("foo", "bar");
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             Order.getOrderFromLocalThenRemote(new FindCallback<Order>() {
                 @Override
                 public void done(List<Order> objects, ParseException e) {
-                    if(e == null){
+                    if (e == null) {
                         orderList = objects;
                         setupListView();
                     }
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         order.saveEventually(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e != null){
+                if (e != null) {
                     Toast.makeText(MainActivity.this, "Order failed", Toast.LENGTH_LONG).show();
                 }
             }
@@ -255,6 +255,13 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("result", drinkOrderList);
         intent.setClass(this, DrinkMenuActivity.class);
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
+    }
+
+    public void goToDetail(Order order){
+        Intent intent = new Intent();
+        intent.putExtra("order", order);
+        intent.setClass(this, OrderDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New  Order"
-        android:id="@+id/textView"
+        android:id="@+id/drinkOrderResultsTextView"
         android:textColor="#11ed27"
         android:textSize="24dp" />
 
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/drinkOrderResultsTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:hint="Name" />
