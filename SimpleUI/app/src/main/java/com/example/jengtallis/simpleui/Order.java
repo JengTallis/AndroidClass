@@ -94,9 +94,10 @@ public class Order extends ParseObject implements Parcelable {
         if (getObjectId() == null) {
             dest.writeInt(0);
             dest.writeString(getNote());
+            dest.writeString(getStoreInfo());
             dest.writeParcelableArray((Parcelable[]) getDrinkOrderList().toArray(), flags);
         } else {
-            dest.writeInt(0);
+            dest.writeInt(1);
             dest.writeString(getObjectId());
         }
     }

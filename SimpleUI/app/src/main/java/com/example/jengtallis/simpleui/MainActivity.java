@@ -53,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Order.getQuery().findInBackground(new FindCallback<Order>() {
-//            @Override
-//            public void done(List<Order> objects, ParseException e) {
-//                Order.deleteAllInBackground(objects);
-//            }
-//        });
+        Order.getQuery().findInBackground(new FindCallback<Order>() {
+            @Override
+            public void done(List<Order> objects, ParseException e) {
+//                if(e != null)
+//                    Log.d("Debug", e.getMessage());
+                Order.unpinAllInBackground("Order");
+            }
+        });
 
         textView = (TextView)findViewById(R.id.drinkOrderResultsTextView);
 
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupOrderHistory();
 
-        setupListView();
+//        setupListView();
         setupSpinner();
 
         Log.d("DEBUG", "MainActivity OnCreate");
