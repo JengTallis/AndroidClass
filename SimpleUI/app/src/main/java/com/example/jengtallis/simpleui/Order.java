@@ -10,6 +10,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -95,8 +96,9 @@ public class Order extends ParseObject implements Parcelable {
             dest.writeInt(0);
             dest.writeString(getNote());
             dest.writeString(getStoreInfo());
-            dest.writeParcelableArray((Parcelable[]) getDrinkOrderList().toArray(), flags);
-        } else {
+//            dest.writeParcelableArray((Parcelable[]) getDrinkOrderList().toArray(), flags);
+            dest.writeTypedList(getDrinkOrderList());
+        }else {
             dest.writeInt(1);
             dest.writeString(getObjectId());
         }
@@ -105,7 +107,10 @@ public class Order extends ParseObject implements Parcelable {
     protected Order(Parcel in) {
         setNote(in.readString());
         setStoreInfo(in.readString());
-        setDrinkOrderList(Arrays.asList((DrinkOrder[]) in.readArray(DrinkOrder.class.getClassLoader())));
+//        setDrinkOrderList(Arrays.asList((DrinkOrder[]) in.readArray(DrinkOrder.class.getClassLoader())));
+        ArrayList<DrinkOrder> drinkOrders = new ArrayList<>();
+        in.readTypedList(drinkOrders, DrinkOrder.CREATOR);
+        this.setDrinkOrderList(drinkOrders);
     }
 
     public static final Parcelable.Creator<Order> CREATOR = new Parcelable.Creator<Order>() {
