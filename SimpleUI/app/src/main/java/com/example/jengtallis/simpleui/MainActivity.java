@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
@@ -200,6 +202,23 @@ public class  MainActivity extends AppCompatActivity {
 
     private void setupSpinner(){
 
+//        Version2:
+
+//        ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>("StoreInfo");
+//        final List<String> storeInfoList = new ArrayList<String>();
+//        parseQuery.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                for(ParseObject info: objects){
+//                    String longInfo = info.getString("name") + " " + info.getString("address");
+//                    storeInfoList.add(longInfo);
+//                }
+//            }
+//        });
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfoList);
+//        spinner.setAdapter(adapter);
+
+//        Version1:
         StoreInfo.getQuery().findInBackground(new FindCallback<StoreInfo>() {
             @Override
             public void done(List<StoreInfo> list, ParseException e) {
@@ -207,7 +226,7 @@ public class  MainActivity extends AppCompatActivity {
                     List<String> storeInfo = new ArrayList<String>();
 
                     for(StoreInfo info : list){
-                        String nameWithAddress = info.getName() + " " + info.getAddress();
+                        String nameWithAddress = info.getName() + ", " + info.getAddress();
                         storeInfo.add(nameWithAddress);
                     }
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
@@ -215,10 +234,9 @@ public class  MainActivity extends AppCompatActivity {
                 }else{
                     String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
-                    e.printStackTrace();
                     spinner.setAdapter(adapter);
+                    e.printStackTrace();
                 }
-
 
                 spinner.setSelection(sharedPreferences.getInt("spinner", 0));
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
