@@ -200,9 +200,6 @@ public class  MainActivity extends AppCompatActivity {
 
     private void setupSpinner(){
 
-//        String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
-
-
         StoreInfo.getQuery().findInBackground(new FindCallback<StoreInfo>() {
             @Override
             public void done(List<StoreInfo> list, ParseException e) {
@@ -239,6 +236,7 @@ public class  MainActivity extends AppCompatActivity {
             }
         });
 
+//        String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
 
 //        spinner.setAdapter(adapter);
